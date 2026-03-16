@@ -1,95 +1,58 @@
-/**
- * Book My Stay App
- * UC1 + UC2 Implementation
- *
- * UC1: Application Entry & Welcome Message
- * UC2: Basic Room Types & Static Availability
- *
- * @author Sheik Rizwan
- * @version 2.1
- */
+import java.util.HashMap;
+import java.util.Map;
 
-// Abstract Room class
-abstract class Room {
+// Inventory class to manage room availability
+class RoomInventory {
 
-    protected String roomType;
-    protected int beds;
-    protected int size;
-    protected double price;
+    private HashMap<String, Integer> inventory;
 
-    public Room(String roomType, int beds, int size, double price) {
-        this.roomType = roomType;
-        this.beds = beds;
-        this.size = size;
-        this.price = price;
+    // Constructor to initialize inventory
+    public RoomInventory() {
+        inventory = new HashMap<>();
+
+        inventory.put("Single Room", 5);
+        inventory.put("Double Room", 3);
+        inventory.put("Suite Room", 2);
     }
 
-    public void displayRoomDetails() {
-        System.out.println("Room Type : " + roomType);
-        System.out.println("Beds      : " + beds);
-        System.out.println("Size      : " + size + " sq.ft");
-        System.out.println("Price     : $" + price);
+    // Method to get availability
+    public int getAvailability(String roomType) {
+        return inventory.getOrDefault(roomType, 0);
     }
-}
 
-// Single Room class
-class SingleRoom extends Room {
+    // Method to update availability
+    public void updateAvailability(String roomType, int count) {
+        inventory.put(roomType, count);
+    }
 
-    public SingleRoom() {
-        super("Single Room", 1, 200, 100.0);
+    // Method to display inventory
+    public void displayInventory() {
+        System.out.println("Current Room Inventory:");
+
+        for (Map.Entry<String, Integer> entry : inventory.entrySet()) {
+            System.out.println(entry.getKey() + " : " + entry.getValue());
+        }
     }
 }
 
-// Double Room class
-class DoubleRoom extends Room {
-
-    public DoubleRoom() {
-        super("Double Room", 2, 350, 180.0);
-    }
-}
-
-// Suite Room class
-class SuiteRoom extends Room {
-
-    public SuiteRoom() {
-        super("Suite Room", 3, 500, 300.0);
-    }
-}
-
+// Main class
 public class BookMyStayApp {
 
     public static void main(String[] args) {
 
-        // UC1: Welcome Message
-        System.out.println("===================================");
-        System.out.println("        Welcome to Book My Stay");
-        System.out.println("      Hotel Booking System v2.1");
-        System.out.println("===================================");
+        System.out.println("Book My Stay - Inventory Setup (Version 3.1)\n");
 
-        // UC2: Room Initialization
-        Room single = new SingleRoom();
-        Room doubleRoom = new DoubleRoom();
-        Room suite = new SuiteRoom();
+        RoomInventory inventory = new RoomInventory();
 
-        // Static availability variables
-        int singleAvailability = 5;
-        int doubleAvailability = 3;
-        int suiteAvailability = 2;
+        inventory.displayInventory();
 
-        System.out.println("\nRoom Details & Availability\n");
+        System.out.println("\nChecking availability of Single Room:");
+        System.out.println("Available: " + inventory.getAvailability("Single Room"));
 
-        single.displayRoomDetails();
-        System.out.println("Available : " + singleAvailability);
-        System.out.println("-----------------------------------");
+        System.out.println("\nUpdating availability of Single Room to 4...");
+        inventory.updateAvailability("Single Room", 4);
 
-        doubleRoom.displayRoomDetails();
-        System.out.println("Available : " + doubleAvailability);
-        System.out.println("-----------------------------------");
-
-        suite.displayRoomDetails();
-        System.out.println("Available : " + suiteAvailability);
-        System.out.println("-----------------------------------");
-
-        System.out.println("Application execution completed.");
+        System.out.println("\nUpdated Inventory:");
+        inventory.displayInventory();
     }
 }
